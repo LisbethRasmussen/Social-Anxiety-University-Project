@@ -30,10 +30,16 @@ public class MainCharScript : MonoBehaviour {
 
 	// Fitting room variables
 	private bool isHiding = false;
+<<<<<<< HEAD
 	public bool GetIsHiding (){return isHiding;}
 	public bool debugFittingRoomRay = false;
 	private Vector3 rayDirection = Vector3.forward;	// Or whatever way the ray shall be directed
 	private float rayDistance = 0.6f;
+=======
+	public bool debugFittingRoomRay = false;
+	private Vector3 rayDirection = Vector3.back;	// Or whatever way the ray shall be directed
+	private float rayDistance = 1.2f;
+>>>>>>> origin/master
 
 	// Use this for initialization
 	void Start () {
@@ -58,9 +64,15 @@ public class MainCharScript : MonoBehaviour {
 			text[i].transform.SetParent(canvas, false);
 			text[i].fontSize = 18;
 			text[i].fontStyle = FontStyle.Bold;
+<<<<<<< HEAD
 			text[i].color = Color.white;
 			text[i].text = words[Random.Range(0, words.Length)];
 			text[i].gameObject.SetActive(false);
+=======
+			text[i].color = Color.black;	// Should be changed to white color when we add the black background
+			text[i].text = words[Random.Range(0, words.Length)];
+			//text[i].gameObject.SetActive(false);
+>>>>>>> origin/master
 		}
 	}
 	
@@ -69,6 +81,7 @@ public class MainCharScript : MonoBehaviour {
 		// To hide in a Fitting room
 		RaycastHit hit;
 		if (Physics.Raycast(this.transform.position, rayDirection, out hit, rayDistance)){	// Or whatever way the ray shall be directed
+<<<<<<< HEAD
 			if (Input.GetKeyDown(KeyCode.Space)){
 				print (hit.collider.gameObject.name);
 			}
@@ -80,6 +93,14 @@ public class MainCharScript : MonoBehaviour {
 		}
 		if (debugFittingRoomRay)
 			Debug.DrawRay(this.transform.position, rayDirection * rayDistance, Color.red);	// Just to draw the ray, can only be seen in scene view!
+=======
+			if (Input.GetKeyDown(KeyCode.Space) && hit.collider.gameObject.name == "Fitting room"){	// Could alternativly check for a tag instead
+				isHiding = !isHiding;
+			} 
+		}
+		if (debugFittingRoomRay)
+			Debug.DrawRay(this.transform.position, rayDirection * rayDistance, Color.blue);	// Just to draw the ray, can only be seen in scene view!
+>>>>>>> origin/master
 
 		// Text stuff!
 		// Shaking the text to make it more "alive" (need adjustments)
@@ -117,7 +138,11 @@ public class MainCharScript : MonoBehaviour {
 
 	void OnCollisionStay(Collision other){
 		// When hitting a row of cloth
+<<<<<<< HEAD
 		if (other.collider.gameObject.tag == "ClothStress"){	// Again, a tag could also be used
+=======
+		if (other.collider.gameObject.name == "Cloth"){	// Again, a tag could also be used
+>>>>>>> origin/master
 			stress += Time.deltaTime * stressMultiplier;
 		}
 	}
