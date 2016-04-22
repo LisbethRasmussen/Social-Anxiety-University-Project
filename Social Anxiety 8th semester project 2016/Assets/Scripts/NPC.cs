@@ -32,7 +32,7 @@ public class NPC : MonoBehaviour {
 	NavMeshAgent agent;
 
 	private bool StaffMember = false;
-
+	public int floorNumber = 0;
 	public Transform[] PatrollingPoints = new Transform[0];
 	public Transform[] StopAtThisPoint = new Transform[0];
 	private int n = -1; //I have et this to -1 instead of zero, because when running the code, the beginning point will be the second, unless this is set to -1. forloop stuf you know.
@@ -41,8 +41,8 @@ public class NPC : MonoBehaviour {
 	private int ArrayCounter = 0;
 
 	private bool ChasingPlayer = false;
-	private float ChasingSpeed = 5f; //You are allowed to twerk this, recall to put an "f" after the number e.g. 3.5f
-	private float NormalSpeed = 3.5f; //You are allowed to twerk this, recall to put an "f" after the number e.g. 3.5f
+	public float ChasingSpeed = 5f; //You are allowed to twerk this, recall to put an "f" after the number e.g. 3.5f
+	public float NormalSpeed = 3.5f; //You are allowed to twerk this, recall to put an "f" after the number e.g. 3.5f
 
 	private bool StopHere = false;
 	private bool ResetStoppingPoint = false;
@@ -55,7 +55,6 @@ public class NPC : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		if (gameObject.tag == "STAFF") {
 			StaffMember = true;
 		}
@@ -66,9 +65,10 @@ public class NPC : MonoBehaviour {
 
 		Player = GameObject.Find ("Player").transform;
 
-		for (int m = 0; m < PatrollingPoints.Length; m++) {
-			PatrollingPoints [m] = GameObject.Find (gameObject.name + m).transform;
+		for (int i = 0; i < PatrollingPoints.Length; i++) {
+			PatrollingPoints [i] = GameObject.Find ("Floor" + floorNumber + "_" + i).transform;
 		}
+		agent.angularSpeed = 0;
 	}
 
 	// Update is called once per frame
@@ -77,10 +77,11 @@ public class NPC : MonoBehaviour {
 
 		MyPosX = transform.position.x;
 
-		if (ChasingPlayer == false && StopHere == false) {
+		/*if (ChasingPlayer == false && StopHere == false) {
 			if (agent.remainingDistance <= 0.1) {
 				n++;
 				agent.speed = NormalSpeed;
+				int randomInt = Random.Range(0, PatrollingPoints.Length);
 				ResetStoppingPoint = false;
 				if (n >= PatrollingPoints.Length) {
 					n = 0;
@@ -103,6 +104,14 @@ public class NPC : MonoBehaviour {
 				StopHere = false;
 				counter = 0;
 				ResetStoppingPoint = true;
+			}
+		}*/
+
+		if (agent.remainingDistance <= 0.5f){
+			counter += Time.deltaTime;
+			if (counter > WaitingTime){
+				counter = 0;
+				agent.SetDestination(PatrollingPoints[Random.Range(0, PatrollingPoints.Length)].position);
 			}
 		}
 

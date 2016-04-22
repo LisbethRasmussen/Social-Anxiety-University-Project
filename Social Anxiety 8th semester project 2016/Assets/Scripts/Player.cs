@@ -22,6 +22,7 @@ Example: if the player is meant to walk at height 0.5 on the floor, the object w
 
 public class Player : MonoBehaviour {
 
+	private MainCharScript MCS;
 	public float ForwardSpeed = 5;
 	public float SidewardsSpeed = 0.1f;
 	public float UpSpeed = 0;
@@ -38,27 +39,30 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		MCS = this.GetComponent<MainCharScript>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
 		//Put movement in here
+		if(MCS.GetIsHiding() == false){
+			if (Input.GetKey(KeyCode.W) /*&& transform.position.z != 2*/ && OnStairs == false && gameObject.transform.position.z <= 2f) {
+				gameObject.transform.position += new Vector3 (0, 0, SidewardsSpeed*Time.deltaTime);
+			}
+			if (Input.GetKey(KeyCode.A)){
+				gameObject.transform.position += new Vector3 (-ForwardSpeed * Time.deltaTime, UpSpeed* Time.deltaTime, 0);
+			}
 
-		if (Input.GetKey(KeyCode.W) && transform.position.z != 2 && OnStairs == false) {
-			gameObject.transform.position += new Vector3 (0, 0, SidewardsSpeed*Time.deltaTime);
-		}
-		if (Input.GetKey(KeyCode.A)){
-			gameObject.transform.position += new Vector3 (-ForwardSpeed * Time.deltaTime, UpSpeed* Time.deltaTime, 0);
+			if (Input.GetKey(KeyCode.S) /*&& transform.position.z <= 0*/ && OnStairs == false && gameObject.transform.position.z >= 0f) {
+				gameObject.transform.position -= new Vector3 (0, 0, SidewardsSpeed*Time.deltaTime);
+			}
+			if (Input.GetKey(KeyCode.D)){
+				gameObject.transform.position += new Vector3 (ForwardSpeed * Time.deltaTime, -1*UpSpeed* Time.deltaTime, 0);
+			}
 		}
 
-		if (Input.GetKey(KeyCode.S) && transform.position.z != 0 && OnStairs == false) {
-			gameObject.transform.position -= new Vector3 (0, 0, SidewardsSpeed*Time.deltaTime);
-		}
-		if (Input.GetKey(KeyCode.D)){
-			gameObject.transform.position += new Vector3 (ForwardSpeed * Time.deltaTime, -1*UpSpeed* Time.deltaTime, 0);
-		}
+
 		//We do not want the player to fly when going up the stairs, or going below the floors when going down the stairs--
 		if (ConstrainOnBottomYaxis == true && transform.position.y <= MyConstraintOnY) {
 			transform.position = new Vector3 (transform.position.x, MyConstraintOnY, transform.position.z);
